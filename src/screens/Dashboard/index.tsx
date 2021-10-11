@@ -6,6 +6,7 @@ import { Background } from '../../components/Background';
 import { Card } from '../../components/Card';
 
 import { useRepositories } from '../../hooks/useRepositories';
+import { api } from '../../services/api';
 
 import {
   Container,
@@ -26,13 +27,19 @@ export function Dashboard() {
 
   const { addRepository, repositories } = useRepositories();
 
-  function handleAddRepository() {
+  async function handleAddRepository() {
     /**
      * TODO: 
      * - call addRepository function sending inputText value;
      * - clean inputText value.
      */
+    try {
+     
+    await addRepository(inputText)
     inputRef.current?.blur();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleRepositoryPageNavigation(id: number) {
@@ -44,6 +51,7 @@ export function Dashboard() {
      *  repositoryId: id of the repository
      * })
      */
+    navigate('Repository', {repositoryId: id})
   }
 
   return (
@@ -55,8 +63,10 @@ export function Dashboard() {
           <Input>
             <InputField
               ref={inputRef}
+              onBlur={() => setInputText('')}
               placeholder="Digite aqui 'usuário/repositório'"
               value={inputText}
+              onChangeText={setInputText}
               /**
                * TODO - update inputText value when input text value 
                * changes:
@@ -71,6 +81,7 @@ export function Dashboard() {
             <InputButton
               testID="input-button"
               onPress={handleAddRepository}
+              disabled={inputText === ''}
             /**
              * TODO - ensure to disable button when inputText is 
              * empty (use disabled prop to this):

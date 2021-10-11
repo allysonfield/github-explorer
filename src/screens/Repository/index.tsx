@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useRoute } from '@react-navigation/core';
 import { Linking } from 'react-native';
 import { useRepositories } from '../../hooks/useRepositories';
@@ -36,25 +36,30 @@ export function Repository() {
   const { findRepositoryById } = useRepositories();
   const repository = findRepositoryById(repositoryId);
 
-  function handleIssueNavigation(issueUrl: string) {
+  async function handleIssueNavigation(issueUrl: string) {
+    await Linking.openURL(issueUrl)
     // TODO - use Linking to open issueUrl in a browser
   }
+
+  // useEffect(() => {
+
+  // }, [])
 
   return (
     <Background>
       <Container>
         <RepoInfo>
-          {/* <OwnerAvatar source={{ uri:  }} /> */}
+          <OwnerAvatar source={{ uri:  repository.owner.avatar_url}} />
 
           <TextGroup>
             <TitleAnimation>
               {
-                // TODO - full name of the repository
+                repository.full_name
               }
             </TitleAnimation>
 
             <Description numberOfLines={2}>{
-              //TODO - repository description
+              repository.description
             }</Description>
           </TextGroup>
         </RepoInfo>
@@ -62,21 +67,21 @@ export function Repository() {
         <RepoStats>
           <Stars>
             <StarsCounter>{
-              // TODO - repository stargazers count
+              repository.stargazers_count
             }</StarsCounter>
             <StarsText>Stars</StarsText>
           </Stars>
 
           <Forks>
             <ForksCounter>{
-              // TODO - repository forks count
+              repository.forks_count
             }</ForksCounter>
             <ForksText>Forks</ForksText>
           </Forks>
 
           <OpenIssues>
             <OpenIssuesCounter>{
-              // TODO - repository issues count
+              repository.open_issues_count
             }</OpenIssuesCounter>
             <OpenIssuesText>Issues{'\n'}Abertas</OpenIssuesText>
           </OpenIssues>
@@ -93,6 +98,7 @@ export function Repository() {
                 title: issue.title,
                 subTitle: issue.user.login,
               }}
+              onPress={() => handleIssueNavigation(issue.html_url)}
             // TODO - onPress prop calling 
             />
           )}

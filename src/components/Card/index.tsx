@@ -65,7 +65,7 @@ export function Card({ data, onPress }: CardProps) {
           </TextGroup>
         </Info>
 
-        <Icon name="chevron-right" size={20} />
+        <Icon  name="chevron-right" size={20} />
       </CardContainer>
     )
   }
